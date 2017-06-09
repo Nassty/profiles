@@ -2,7 +2,9 @@
 const SET_SELECTED = "SET_SELECTED";
 const setSelected = (name) => ({
   type: SET_SELECTED,
-  name
+  name,
+  confirm: true,
+  message: 'posta?'
 });
 
 const selected = (state=null, action) => {

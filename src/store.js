@@ -6,8 +6,10 @@ import reducers from './reducers'
 
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
+import passthruMiddleware from './middlewares/passthruMiddleware';
+import confirmMiddleware from './middlewares/confirmMiddleware';
 
-const middlewares = [logger, thunk];
+const middlewares = [logger, thunk, passthruMiddleware, confirmMiddleware];
 
 const createStore = compose(
   applyMiddleware(...middlewares),

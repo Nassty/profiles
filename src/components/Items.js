@@ -1,18 +1,20 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import {branch, compose, renderNothing} from 'recompose';
+import {branch, compose, renderNothing, flattenProp} from 'recompose';
 
 const renderLoading = branch(
   ({item}) => !item,
   renderNothing
 );
 
-const enhance = compose(renderLoading);
+const flattenItem = flattenProp('item');
 
-const Items = enhance(({item}) => (
+const enhance = compose(renderLoading, flattenItem);
+
+const Items = enhance(({title, body, id}) => (
   <pre>
-    {JSON.stringify(item, null, 4)}
+    {JSON.stringify({title, body, id}, null, 4)}
   </pre>
 ));
 

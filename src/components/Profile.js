@@ -3,32 +3,23 @@ import {connect} from 'react-redux';
 import {setSelected} from '../reducers/selected';
 import {fetchItem} from '../reducers/items';
 
-class Profile extends React.PureComponent {
-
-  constructor() {
-    super();
-    this.state = {hovered: false, clicked: false};
-  }
-  onMouseOver = () => this.setState({hovered: true});
-  onMouseOut = () => this.setState({hovered: false});
-  render() {
-    const {name, id, selected, onClick} = this.props;
-    const {hovered} = this.state;
-    const clicked = name === selected;
-    const color = (hovered || clicked) ? '#CCC': '#333';
-    const style = {
-      color
-    };
-    return (
-      <div
-        onMouseOver={this.onMouseOver.bind(this)}
-        onMouseOut={this.onMouseOut.bind(this)}
-        onClick={onClick({name, id})}
-      >
-        <h4 style={style}>{name} </h4>
-      </div>
-    );
-  }
+const Profile = ({user, selected, onClick}) => {
+  const clicked = user.id === selected;
+  const color = clicked ? '#E00': '#333';
+  const style = {color};
+  return (
+    <div
+      style={style}
+      onClick={onClick(user)}
+    >
+      <h4> {user.username} ({user.name})</h4>
+      <ul>
+        <li>{user.email}</li>
+        <li>{user.phone}</li>
+        <li>{user.website}</li>
+      </ul>
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
@@ -36,9 +27,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onClick: item => () => {
-    dispatch(setSelected(item.name));
-    dispatch(fetchItem(item.id));
+  onClick: user => () => {
+    dispatch(setSelected(user.id));
+    dispatch(fetchItem(user.id));
   }
 });
 

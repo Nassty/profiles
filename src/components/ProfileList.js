@@ -5,7 +5,24 @@ import Profile from './Profile';
 import Items from './Items';
 import {fetchUsers} from '../reducers/users';
 
-const ProfileList = ({users, onClick}) => (
+import {compose, branch, renderComponent} from 'recompose';
+
+const Loading = () => <p>Loading ... </p>;
+const ErrorComponent = ({error}) => <pre>{JSON.stringify(error, null, 4)}</pre>;
+
+const renderLoading = branch(
+  ({loading}) => loading,
+  renderComponent(Loading)
+);
+
+const renderError = branch(
+  ({error}) => error,
+  renderComponent(ErrorComponent)
+);
+
+const enhance = compose(renderLoading, renderError);
+
+const ProfileList = enhance(({users, onClick}) => (
   <div>
     <div style={{clear: 'both'}}>
       <button onClick={onClick}>Load Users</button>
@@ -19,10 +36,12 @@ const ProfileList = ({users, onClick}) => (
       <Items />
     </div>
   </div>
-);
+));
 
 const mapStateToProps = state => ({
   users: state.users.entities,
+  loading: state.users.loading,
+  error: state.users.error
 });
 
 const mapDispatchToProps = dispatch => ({
